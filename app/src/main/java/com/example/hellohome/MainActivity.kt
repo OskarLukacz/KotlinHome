@@ -2,12 +2,14 @@ package com.example.hellohome
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Context.*
 import android.content.DialogInterface
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.support.v4.content.ContextCompat
 import com.pubnub.api.PNConfiguration
 import com.pubnub.api.PubNub
 import com.pubnub.api.callbacks.PNCallback
@@ -27,28 +29,6 @@ import java.util.Arrays
 
 class MainActivity : AppCompatActivity() {
 
-    //Activity Variables
-
-
-    //Pubnub Variables
-    val pnConfiguration = PNConfiguration()
-    val subscribeCallback: SubscribeCallback = object : SubscribeCallback()  {
-        override fun status(pubnub: PubNub, status: PNStatus) {if (status.getCategory() == PNStatusCategory.PNConnectedCategory) {publish(ping,0)}}
-        override fun message(pubnub: PubNub, message: PNMessageResult) {handleMessage(message.message.toString())}
-        override fun presence(pubnub: PubNub, presence: PNPresenceEventResult) {}
-    }
-    val pubNub = PubNub(pnConfiguration)
-
-    //Global Variables
-    var state = BooleanArray(4)
-    val ping: JsonObject = JsonObject()
-    var toggles = arrayListOf<CompoundButton>()
-    var images = arrayListOf<ImageView>()
-    var bars = arrayListOf<CircularProgressBar>()
-    var waitingForResponse = false
-
-
-
     //onCreate function
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -57,80 +37,79 @@ class MainActivity : AppCompatActivity() {
 
         //Activity specifc variables
 
-        val toggle:  CompoundButton = findViewById(R.id.toggleButton)
-        val toggle2: CompoundButton = findViewById(R.id.toggleButton2)
-        val toggle3: CompoundButton = findViewById(R.id.toggleButton3)
-        val toggle4: CompoundButton = findViewById(R.id.toggleButton4)
+        val toggle0: CompoundButton = findViewById(R.id.toggleButton)
+        val toggle1: CompoundButton = findViewById(R.id.toggleButton2)
+        val toggle2: CompoundButton = findViewById(R.id.toggleButton3)
+        val toggle3: CompoundButton = findViewById(R.id.toggleButton4)
 
-        val image:   ImageView = findViewById(R.id.imageView)
-        val image2:  ImageView = findViewById(R.id.imageView2)
-        val image3:  ImageView = findViewById(R.id.imageView3)
-        val image4:  ImageView = findViewById(R.id.imageView4)
+        val image0:  ImageView = findViewById(R.id.imageView)
+        val image1:  ImageView = findViewById(R.id.imageView2)
+        val image2:  ImageView = findViewById(R.id.imageView3)
+        val image3:  ImageView = findViewById(R.id.imageView4)
 
-        val bar:     CircularProgressBar = findViewById(R.id.circularProgressBar)
-        val bar2:    CircularProgressBar = findViewById(R.id.circularProgressBar2)
-        val bar3:    CircularProgressBar = findViewById(R.id.circularProgressBar3)
-        val bar4:    CircularProgressBar = findViewById(R.id.circularProgressBar4)
+        val bar0:    CircularProgressBar = findViewById(R.id.circularProgressBar)
+        val bar1:    CircularProgressBar = findViewById(R.id.circularProgressBar2)
+        val bar2:    CircularProgressBar = findViewById(R.id.circularProgressBar3)
+        val bar3:    CircularProgressBar = findViewById(R.id.circularProgressBar4)
 
-        toggles = arrayListOf(toggle,toggle2,toggle3,toggle4)
-        images = arrayListOf(image,image2,image3,image4)
-        bars = arrayListOf(bar,bar2,bar3,bar4)
+        //Initialize activity related variables
 
-        for (bar in bars){
-            bar.apply {
+        outlets.add(Outlet(0, UIObject(toggle0,image0,bar0)))
+        outlets.add(Outlet(1, UIObject(toggle1,image1,bar1)))
+        outlets.add(Outlet(2, UIObject(toggle2,image2,bar2)))
+        outlets.add(Outlet(3, UIObject(toggle3,image3,bar3)))
+
+        for (i in 0..3)
+        {
+            outlets[i].ui.progressBar.apply {
                 setProgressWithAnimation(5f, 1000) // =1s
                 indeterminateMode = true
             }
         }
 
-
         //PubNub configuration
+        val subscribeCallback: SubscribeCallback = object : SubscribeCallback() {
+            override fun status(pubnub: PubNub, status: PNStatus) {
+                if (status.getCategory() == PNStatusCategory.PNConnectedCategory) {
+                    pubNub.publish(pubNub.ping, 0)
+                }
+            }
 
-        pnConfiguration.subscribeKey = "sub-c-05dce56c-3c2e-11e7-847e-02ee2ddab7fe"
-        pnConfiguration.publishKey = "pub-c-b6db3020-95a8-4c60-8d16-13345aaf8709"
-        ping.addProperty("ping", "Kotlin")
+            override fun message(pubnub: PubNub, message: PNMessageResult) {
+                handleMessage(message.message.toString())
+            }
+
+            override fun presence(pubnub: PubNub, presence: PNPresenceEventResult) {}
+        }
+
+        pubNub.configure(subscribeCallback)
 
 
         //Start listeners
-
-        pubNub.run {
-            addListener(subscribeCallback)
-            subscribe()
-                .channels(Arrays.asList("hello_world")) // subscribe to channels
-                .execute()
-        }
+        pubNub.subscribe()
 
     }
+
 
     //onRestart function
     override fun onRestart()
     {
         super.onRestart()
-        reStartPubNubSubscribe()
-    }
-
-    //Timeout Protector
-    fun timeoutProtector()
-    {
-        Handler().postDelayed({
-            if (waitingForResponse) {error(2)}
-        }, 7000)
+        pubNub.reStartPubNubSubscribe()
     }
 
 
-    //Restart Pubnub listener
-    fun reStartPubNubSubscribe()
+    //Handle new subscribe event
+    fun handleMessage(message: String)
     {
-
-        pubNub.run{
-            removeListener(subscribeCallback)
-            unsubscribeAll()
-        }
-        pubNub.run {
-            addListener(subscribeCallback)
-            subscribe()
-                .channels(Arrays.asList("hello_world")) // subscribe to channels
-                .execute()
+        updateTextField(message)
+        if (message.substring(2, 8) == "status") {
+            println("Status received")
+            if (message.contains("curState_")) {
+                val i = message.indexOf("curState_")
+                val newState = message.substring(i + 9, i + 13)
+                newState(newState)
+            }
         }
     }
 
@@ -140,8 +119,6 @@ class MainActivity : AppCompatActivity() {
     {
         val btn = view as ToggleButton
         val state = btn.isChecked
-        val payload = JsonObject()
-        val token: String
         var i = 0
         when (btn.id) {
             R.id.toggleButton ->  i = 0
@@ -150,51 +127,32 @@ class MainActivity : AppCompatActivity() {
             R.id.toggleButton4 -> i = 3
         }
 
-        this@MainActivity.runOnUiThread(java.lang.Runnable {
-            btn.toggle()
-        })
-
-        token = "$i"
-
-        if (state)  { payload.addProperty(token, "o") }
-        else        { payload.addProperty(token, "f") }
-
-        publish(payload,1)
-    }
-
-    //Update UI to in progress
-    fun updateInProgress (i: Int)
-    {
-        this@MainActivity.runOnUiThread(java.lang.Runnable {
-            images[i].visibility = View.INVISIBLE
-            bars[i].visibility = View.VISIBLE
-            for(i in toggles) {i.setClickable(false)}
-        })
-        timeoutProtector()
-    }
-
-
-    //Handle new PubNub message
-    fun handleMessage(message: String)
-    {
         runOnUiThread {
-            textView.run { text = ("Last message: $message") }
+            btn.toggle()
         }
 
-        if (message.substring(2,8) == "status") {
-            println("Status received")
-            waitingForResponse = false
-            if (message.contains("curState_") ) {
-                val i = message.indexOf("curState_")
-                val localState = message.substring(i+9,i+13)
-                updateState(localState)
+        if (state) {outlets[i].turnOn()}
+        else {outlets[i].turnOff()}
+    }
+
+    //Update the state in UI
+    fun updateUIState (state: List<Boolean>)
+    {
+        runOnUiThread {
+            for (i in 0..3) {
+                outlets[i].ui.toggle.setChecked(state[i])
             }
         }
     }
 
-
+    fun updateTextField(newMessage: String)
+    {
+        runOnUiThread {
+            textView.run { text = ("Last message: $newMessage") }
+        }
+    }
     //Update current state and set UI to reflect change
-    fun updateState(input: String)
+    fun newState(input: String)
     {
         var updatedStateArray = mutableListOf<Boolean>()
         if (input.length == 4) {
@@ -203,20 +161,15 @@ class MainActivity : AppCompatActivity() {
                     '0' -> updatedStateArray.add(false)
                     '1' -> updatedStateArray.add(true)
                 }
-
             }
             println(updatedStateArray.toString())
 
-            this@MainActivity.runOnUiThread(java.lang.Runnable {
-                for (i in 0..3) {
-                    toggles[i].setChecked(updatedStateArray[i])
-                    for(i in toggles) {i.setClickable(true)}
-                    for(i in images)  {i.visibility = View.VISIBLE}
-                    for(i in bars)    {i.visibility = View.INVISIBLE}
-                    state[i] = updatedStateArray[i]
+            for (x in 0..3) {
+                if (updatedStateArray[x] != outlets[x].state) {
+                    runOnUiThread { outlets[x].setNewState(updatedStateArray[x]) }
                 }
-            })
-
+            }
+            updateUIState(updatedStateArray)
         }
     }
 
@@ -242,47 +195,22 @@ class MainActivity : AppCompatActivity() {
             "Toggle All" -> msg.addProperty("A", "A")
         }
 
-        publish(msg,1)
+        pubNub.publish(msg,1)
     }
 
-
-    //Publish JSON object with context if network is connected
-    fun publish(msg: JsonObject, flag: Int)
-    {
-
-        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
-        val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
-
-        if (isConnected) {
-            pubNub.run {
-                publish()
-                    .message(msg)
-                    .channel("hello_world")
-                    .async(object : PNCallback<PNPublishResult>() {
-
-                        override fun onResponse(result: PNPublishResult, status: PNStatus) {
-                            if (!status.isError) {
-                                if (flag == 1){
-                                    val i = msg.toString()[2].toString().toInt()
-                                    updateInProgress(i)
-                                    waitingForResponse = true
-                                }
-
-                            } else {
-                                println("Could not publish")
-                                error(0)
-                            }
-                        }
-                    })
-            }
-        }
-        else{error(1)}
+    /*
+    //Connection check
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE)
+        return if (connectivityManager is ConnectivityManager) {
+            val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+            networkInfo?.isConnected ?: false
+        } else false
     }
 
 
     //Error Handling
-    fun error(flag: Int)
+    fun errorOccured(flag: Int)
     {
         var errorMessage = ""
         var positiveMessage = ""
@@ -307,13 +235,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        var lastState = ""
-        for (i in state){
-            if (i) {lastState += "1"}
-            else {lastState += "0"}
-        }
-
-        updateState(lastState)
 
         val dialogBuilder = AlertDialog.Builder(this)
 
@@ -325,7 +246,7 @@ class MainActivity : AppCompatActivity() {
                 {
                     "TODO" -> println("Error needs fixing")
                     "Close Application" -> finish()
-                    "Reset Subscriber" -> reStartPubNubSubscribe()
+                    "Reset Subscriber" -> pubNub.reStartPubNubSubscribe()
                 }
         })
         .setNegativeButton(negetiveMessage, DialogInterface.OnClickListener {
@@ -341,5 +262,5 @@ class MainActivity : AppCompatActivity() {
         alert.setTitle("Error")
 
         alert.show()
-    }
+    }*/
 }
