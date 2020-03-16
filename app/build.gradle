@@ -32,4 +32,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation group: 'com.pubnub', name: 'pubnub-gson', version: '4.20.0'
     implementation 'com.mikhaellopez:circularprogressbar:3.0.3'
+    implementation 'com.victor:lib:1.0.4'
+
 }

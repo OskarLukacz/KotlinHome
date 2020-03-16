@@ -2,6 +2,23 @@ package com.example.hellohome
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.os.Handler
+
+val handler = Handler()
+
+class Run {
+    companion object {
+        fun after(delay: Long, process: () -> Unit) {
+            handler.postDelayed({
+                process()
+            }, delay)
+        }
+
+        fun cancelAll() {
+            handler.removeCallbacksAndMessages(null)
+        }
+    }
+}
 
 /*fun errorOccured(flag: Int)
 {

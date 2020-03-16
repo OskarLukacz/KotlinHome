@@ -5,179 +5,36 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
-
-    <LinearLayout
-
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:id="@+id/directButtonTopRow"
-            android:layout_marginLeft="8dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginRight="8dp"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/directButtonBottomRow" app:layout_constraintVertical_bias="0.87">
+        tools:context=".MainActivity"
+        android:id="@+id/constraintLayout" android:visibility="visible">
 
 
-        <Button
-                android:id="@+id/zeroOn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Zero ON"
-                android:onClick="handlePress"
-                tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="144dp" style="@android:style/Widget.Material.Button"/>
+    <ImageButton
+            android:layout_width="28dp"
+            android:layout_height="28dp" app:srcCompat="@drawable/settings"
+            android:id="@+id/debugButton" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
+            android:elevation="0dp" style="@android:style/Widget.ImageButton" android:background="@color/background"
+            android:onClick="debugMode" android:scaleType="fitCenter" tools:ignore="ContentDescription"/>
 
-        <Button
-                android:id="@+id/zeroOff"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Zero OFF"
-                android:onClick="handlePress"
-                tools:layout_editor_absoluteX="105dp"
-                tools:layout_editor_absoluteY="144dp" style="@style/Widget.AppCompat.Button"/>
+    <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/syncButton"
+            android:layout_marginTop="12dp" app:layout_constraintTop_toTopOf="parent"
+            android:elevation="0dp" style="@android:style/Widget.ImageButton" android:background="@color/background"
+            android:layout_marginStart="12dp"
+            app:layout_constraintStart_toStartOf="parent" app:srcCompat="@drawable/sync"
+            android:scaleType="fitCenter" android:onClick="syncOnClick" tools:ignore="ContentDescription"/>
 
-        <Button
-                android:id="@+id/oneOn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="One ON"
-                android:onClick="handlePress"
-                tools:layout_editor_absoluteX="191dp"
-                tools:layout_editor_absoluteY="144dp" style="@style/Widget.AppCompat.Button"/>
+    <com.victor.loading.rotate.RotateLoading
+            android:id="@+id/syncLoading"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            android:layout_gravity="center|fill_horizontal|fill_vertical" android:layout_marginTop="6dp"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="6dp" android:visibility="visible"/>
 
-        <Button
-                android:id="@+id/oneOff"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="One OFF"
-                android:onClick="handlePress"
-                tools:layout_editor_absoluteX="280dp"
-                tools:layout_editor_absoluteY="144dp" style="@style/Widget.AppCompat.Button"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-
-            android:id="@+id/directButtonBottomRow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="8dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginRight="8dp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintVertical_bias="0.65">
-
-
-        <Button
-                android:id="@+id/twoOn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Two ON"
-                android:onClick="handlePress"
-                tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="144dp" style="@style/Widget.AppCompat.Button"/>
-
-        <Button
-                android:id="@+id/twoOff"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Two OFF"
-                android:onClick="handlePress"
-                tools:layout_editor_absoluteX="105dp"
-                tools:layout_editor_absoluteY="144dp" style="@style/Widget.AppCompat.Button"/>
-
-        <Button
-                android:id="@+id/threeOn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Three ON"
-                android:onClick="handlePress"
-                tools:layout_editor_absoluteX="191dp"
-                tools:layout_editor_absoluteY="144dp" style="@style/Widget.AppCompat.Button"/>
-
-        <Button
-                android:id="@+id/threeOff"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Three OFF"
-                android:onClick="handlePress"
-                tools:layout_editor_absoluteX="280dp"
-                tools:layout_editor_absoluteY="144dp" style="@style/Widget.AppCompat.Button"/>
-
-    </LinearLayout>
-    <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="32dp" android:layout_marginEnd="32dp"
-            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="32dp"
-            android:layout_marginTop="32dp" app:layout_constraintTop_toBottomOf="@+id/directButtonBottomRow"
-            android:id="@+id/textLayout">
-        <TextView
-                android:text="Last message: NONE"
-                android:layout_height="105dp" android:id="@+id/textView" android:layout_weight="1"
-                android:layout_width="0dp"
-                android:textAppearance="@android:style/TextAppearance.Holo.Widget.TextView"
-                android:textColor="@android:color/darker_gray"/>
-    </LinearLayout>
-    <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="395dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/directButtonTopRow" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" app:layout_constraintVertical_bias="0.75" android:gravity="center"
-            android:id="@+id/toggleLayout">
-        <ToggleButton
-                android:onClick="toggleFunction"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/toggleButton" android:layout_marginTop="8dp"
-                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="8dp"
-                style="@android:style/Widget.Holo.Button.Toggle" android:checked="true" android:clickable="true"
-                app:layout_constraintVertical_bias="0.264" app:layout_constraintHorizontal_bias="0.498"
-                android:layout_weight="1"/>
-        <ToggleButton
-                android:onClick="toggleFunction"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/toggleButton2" android:layout_marginTop="8dp"
-                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="8dp"
-                style="@android:style/Widget.Holo.Button.Toggle" android:checked="true" android:clickable="true"
-                app:layout_constraintVertical_bias="0.264" app:layout_constraintHorizontal_bias="0.498"
-                android:layout_weight="1"/>
-        <ToggleButton
-                android:onClick="toggleFunction"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/toggleButton3" android:layout_marginTop="8dp"
-                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="8dp"
-                style="@android:style/Widget.Holo.Button.Toggle" android:checked="true" android:clickable="true"
-                app:layout_constraintVertical_bias="0.264" app:layout_constraintHorizontal_bias="0.498"
-                android:layout_weight="1"/>
-        <ToggleButton
-                android:onClick="toggleFunction"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/toggleButton4" android:layout_marginTop="8dp"
-                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="8dp"
-                style="@android:style/Widget.Holo.Button.Toggle" android:checked="true" android:clickable="true"
-                app:layout_constraintVertical_bias="0.264" app:layout_constraintHorizontal_bias="0.498"
-                android:layout_weight="1"/>
-    </LinearLayout>
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="395dp"
@@ -200,8 +57,8 @@
                 android:layout_weight="1" android:scaleType="fitCenter"/>
         <ImageView
                 android:layout_width="10dp"
-                android:layout_height="55dp" app:srcCompat="@drawable/speakerpng" android:id="@+id/imageView4"
-                android:layout_weight="1" android:scaleType="fitCenter"/>
+                android:layout_height="55dp" android:id="@+id/imageView4"
+                android:layout_weight="1" android:scaleType="fitCenter" app:srcCompat="@drawable/lightpng"/>
     </LinearLayout>
     <LinearLayout
             android:orientation="horizontal"
@@ -268,6 +125,290 @@
                 app:layout_constraintBottom_toTopOf="@+id/toggleLayout"
                 android:layout_gravity="bottom" android:layout_width="wrap_content"
                 android:layout_marginHorizontal="21dp" android:paddingHorizontal="30dp"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="395dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" android:gravity="center"
+            android:id="@+id/toggleLayout"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/bottomMenuLayout"
+            app:layout_constraintVertical_bias=".50">
+        <ToggleButton
+                android:onClick="toggleFunction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/toggleButton" android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp"
+                style="@android:style/Widget.Holo.Button.Toggle" android:checked="false" android:clickable="false"
+                app:layout_constraintVertical_bias="0.264" app:layout_constraintHorizontal_bias="0.498"
+                android:layout_weight="1"/>
+        <ToggleButton
+                android:onClick="toggleFunction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/toggleButton2" android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp"
+                style="@android:style/Widget.Holo.Button.Toggle" android:clickable="false"
+                app:layout_constraintVertical_bias="0.264" app:layout_constraintHorizontal_bias="0.498"
+                android:layout_weight="1" android:checked="false"/>
+        <ToggleButton
+                android:onClick="toggleFunction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/toggleButton3" android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp"
+                style="@android:style/Widget.Holo.Button.Toggle" android:checked="false" android:clickable="false"
+                app:layout_constraintVertical_bias="0.264" app:layout_constraintHorizontal_bias="0.498"
+                android:layout_weight="1"/>
+        <ToggleButton
+                android:onClick="toggleFunction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/toggleButton4" android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp"
+                style="@android:style/Widget.Holo.Button.Toggle"
+                app:layout_constraintVertical_bias="0.264" app:layout_constraintHorizontal_bias="0.498"
+                android:layout_weight="1" android:checked="false" android:clickable="false"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            android:id="@+id/debugLayout" android:gravity="center"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/bottomMenuLayout" app:layout_constraintVertical_bias="1">
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center" android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/debugButton" android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/progressLayout" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp"
+                android:id="@+id/requestsLayout">
+            <Button
+                    android:text="Ping"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/ping" android:layout_weight="1"
+                    android:onClick="ping"/>
+            <Button
+                    android:text="State"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/state" android:layout_weight="1"
+                    android:onClick="state"/>
+            <Button
+                    android:text="MKR1000"
+                    android:onClick="showPopUp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/MKR1000" android:layout_weight="1"/>
+            <Button
+                    android:text="ESP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/ESP" android:layout_weight="1"
+                    android:onClick="showPopUp"/>
+        </LinearLayout>
+        <LinearLayout
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/directButtonTopRow"
+                android:layout_marginLeft="8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginRight="8dp"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/directButtonBottomRow"
+                app:layout_constraintVertical_bias="0.87">
+
+
+            <Button
+                    android:id="@+id/zeroOn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Zero ON"
+                    android:onClick="debugOnClick"
+                    tools:layout_editor_absoluteX="16dp"
+                    tools:layout_editor_absoluteY="144dp"
+            />
+
+            <Button
+                    android:id="@+id/zeroOff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Zero OFF"
+                    android:onClick="debugOnClick"
+                    tools:layout_editor_absoluteX="105dp"
+                    tools:layout_editor_absoluteY="144dp"
+            />
+
+            <Button
+                    android:id="@+id/oneOn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="One ON"
+                    android:onClick="debugOnClick"
+                    tools:layout_editor_absoluteX="191dp"
+                    tools:layout_editor_absoluteY="144dp"/>
+
+            <Button
+                    android:id="@+id/oneOff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="One OFF"
+                    android:onClick="debugOnClick"
+                    tools:layout_editor_absoluteX="280dp"
+                    tools:layout_editor_absoluteY="144dp"/>
+
+        </LinearLayout>
+        <LinearLayout
+
+                android:id="@+id/directButtonBottomRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginRight="8dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintVertical_bias="0.65">
+
+
+            <Button
+                    android:id="@+id/twoOn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Two ON"
+                    android:onClick="debugOnClick"
+                    tools:layout_editor_absoluteX="16dp"
+                    tools:layout_editor_absoluteY="144dp"/>
+
+            <Button
+                    android:id="@+id/twoOff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Two OFF"
+                    android:onClick="debugOnClick"
+                    tools:layout_editor_absoluteX="105dp"
+                    tools:layout_editor_absoluteY="144dp"/>
+
+            <Button
+                    android:id="@+id/threeOn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Three ON"
+                    android:onClick="debugOnClick"
+                    tools:layout_editor_absoluteX="191dp"
+                    tools:layout_editor_absoluteY="144dp"/>
+
+            <Button
+                    android:id="@+id/threeOff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Three OFF"
+                    android:onClick="debugOnClick"
+                    tools:layout_editor_absoluteX="280dp"
+                    tools:layout_editor_absoluteY="144dp"/>
+
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="340dp"
+                android:layout_height="128dp" app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="32dp" android:layout_marginEnd="32dp"
+                android:id="@+id/textLayout" android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/directButtonBottomRow" android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+            <ScrollView android:id="@+id/scrollView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" android:scrollbarStyle="insideInset" android:visibility="visible"
+                        android:scrollbarAlwaysDrawHorizontalTrack="false"
+                        android:scrollbarAlwaysDrawVerticalTrack="true"
+                        android:scrollIndicators="right">
+
+                <TextView android:id="@+id/textView"
+                          android:layout_width="wrap_content"
+                          android:gravity="bottom"
+                          android:layout_height="wrap_content" android:textColor="@android:color/background_light"/>
+            </ScrollView>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            android:id="@+id/bottomMenuLayout">
+        <View
+                android:id="@+id/divider"
+                android:layout_width="380dp"
+                android:layout_height="2dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp" app:layout_constraintHorizontal_bias="0.533"
+                tools:layout_editor_absoluteY="602dp" android:layout_weight="1"/>
+        <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" android:layout_weight="1"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:id="@+id/buttonsBottomLayout" tools:layout_editor_absoluteY="617dp"
+                tools:layout_editor_absoluteX="8dp">
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp" app:srcCompat="@drawable/developerboard"
+                    android:id="@+id/arduinoButton" android:layout_weight="1" android:background="@color/background"
+                    android:scaleType="fitCenter" android:onClick="showPopUp"/>
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp" app:srcCompat="@drawable/power" android:id="@+id/masterButton"
+                    android:layout_weight="1" android:background="@color/background" android:scaleType="fitCenter"
+                    android:onClick="masterOnClick"/>
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp" app:srcCompat="@drawable/wol" android:id="@+id/wolButton"
+                    android:layout_weight="1" android:background="@color/background" android:scaleType="fitCenter"
+                    android:onClick="wolOnClick"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_height="10dp" android:layout_weight="1" android:id="@+id/indicatorsBottomLayout"
+                android:layout_width="match_parent" android:gravity="center">
+            <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:layout_weight="1"/>
+            <View
+                    android:id="@+id/masterIndicator"
+                    android:layout_height="3dp"
+                    android:layout_weight=".08" android:layout_width="20dp"
+                    android:background="@color/off"/>
+            <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:layout_weight="1"/>
+        </LinearLayout>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

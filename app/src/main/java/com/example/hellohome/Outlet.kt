@@ -1,74 +1,48 @@
 package com.example.hellohome
 
 import android.os.Handler
-import android.text.Layout
 import android.view.View
-import android.view.ViewParent
 import android.widget.CompoundButton
 import android.widget.ImageView
-import android.widget.ToggleButton
 import com.google.gson.JsonObject
 import com.mikhaellopez.circularprogressbar.CircularProgressBar
 
-var handler = Handler()
-var outlets = arrayListOf<Outlet>()
+//var handler = Handler()
 
-class Outlet(id: Int, ui: UIObject){
-    var id = id
-    var ui = ui
+
+class Outlet(var id: Int, var ui: UIObject) {
     var state = false
+    var updatingTo = state
     var updating = false
 
-    fun turnOn()
-    {
-        val payload = JsonObject()
-        setInProgress(true)
-        payload.addProperty("$id", "o")
-        pubNub.publish(payload,1)
-        timeoutProtector()
-    }
-    fun turnOff()
-    {
-        val payload = JsonObject()
-        setInProgress(true)
-        payload.addProperty("$id", "f")
-        pubNub.publish(payload,1)
-        timeoutProtector()
+    fun setsState(to: Boolean) {
+        if (to != state) {
+            update(false, to)
+        }
+        state = to
+        ui.button.isChecked = to
+
     }
 
-    fun setNewState(newState: Boolean)
-    {
-        ui.toggle.isChecked = newState
-        setInProgress(false)
-        updating = false
-        state = newState
-        handler.removeCallbacksAndMessages("timeoutProtector$id")
-    }
 
-    fun setInProgress(inProgress: Boolean)
-    {
-        updating = ui.setUIInProgress(inProgress)
-    }
-
-    fun timeoutProtector()
-    {
-        handler.postDelayed({
-            if (updating) {
-                println("error 2")
-            }
-        },"timeoutProtector$id", 7000)
+    fun update(inProgress: Boolean, to: Boolean) {
+        if (inProgress) {
+            ui.setUIInProgress(true)
+            updating = true
+            updatingTo = to
+        }else {
+            ui.setUIInProgress(false)
+            updating = false
+            updatingTo = state
+        }
     }
 }
 
-class UIObject(toggle: CompoundButton, image: ImageView, progressBar: CircularProgressBar){
+class UIObject(var button: CompoundButton, private var image: ImageView, var progressBar: CircularProgressBar){
 
-    var toggle = toggle
-    var image = image
-    var progressBar = progressBar
-
-    fun setUIInProgress(inProgress: Boolean): Boolean
+    fun setUIInProgress(inProgress: Boolean)
     {
-        toggle.setClickable(!inProgress)
+        button.isClickable = !inProgress
 
         if (inProgress) {
             image.visibility = View.INVISIBLE
@@ -77,16 +51,6 @@ class UIObject(toggle: CompoundButton, image: ImageView, progressBar: CircularPr
             image.visibility = View.VISIBLE
             progressBar.visibility = View.INVISIBLE
         }
-        return inProgress
     }
 }
 
-
-fun getState(outlets: Array<Outlet>): BooleanArray {
-
-    var state = BooleanArray(outlets.size-1)
-    for (i in 0..outlets.size-1){
-        state[i] = outlets[i].state
-    }
-    return state
-}
